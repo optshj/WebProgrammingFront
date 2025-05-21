@@ -51,8 +51,15 @@ resource "aws_instance" "react_app" {
 
   vpc_security_group_ids = [local.security_group_id]
   tags = {
-    Name:"Hunt EC2"
-    }
+    Name = "Hunt EC2"
+    Project = "hunt-web-app"
+  }
+  lifecycle {
+    ignore_changes = [
+      user_data,    # user_data 변경 시 재생성 방지
+      ami           # AMI 변경 시 명시적 재생성 필요
+    ]
+  }
 }
 
 variable "docker_image" {

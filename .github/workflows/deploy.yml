@@ -2,6 +2,10 @@ name: Deploy to AWS
 
 on: [push]
 
+env:
+    AWS_REGION: ap-northeast-2
+    ECR_REPOSITORY: my-react-app
+
 jobs:
     build-and-push:
         runs-on: ubuntu-latest
@@ -9,14 +13,18 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Set up Docker
-              uses: docker/setup-qemu-action@v2
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
 
-            - name: Login to ECR
-              uses: aws-actions/amazon-ecr-login@v1
-              env:
-                  AWS_REGION: ap-northeast-2
-                  AWS_DEFAULT_REGION: ap-northeast-2
+            - name: Login to Amazon ECR
+              id: ecr-login
+              uses: aws-actions/amazon-ecr-login@v2
+              with:
+                  mask-password: "true"
 
             - name: Build and push
               uses: docker/build-push-action@v5
@@ -24,7 +32,7 @@ jobs:
                   context: .
                   push: true
                   tags: |
-                      ${{ steps.ecr.outputs.registry }}/my-react-app:latest
+                      ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
 
     deploy-infra:
         needs: build-and-push
@@ -37,10 +45,10 @@ jobs:
               uses: hashicorp/setup-terraform@v2
 
             - name: Terraform Init
-              run: terraform init
+              run: terraform init -backend-config="bucket=my-terraform-state"
 
             - name: Terraform Apply
               run: terraform apply -auto-approve
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }} # [5][8]
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}

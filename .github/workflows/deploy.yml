@@ -52,16 +52,18 @@ jobs:
             - name: Terraform Apply
               run: terraform apply -auto-approve
 
-            - name: Get EC2 Public IP
+            - name: Get Public IP
               id: get_ip
               run: |
-                  echo "ip=$(terraform output -raw instance_public_ip)" >> $GITHUB_OUTPUT
+                  IP=$(terraform output -raw instance_public_ip | tr -d '\n')
+                  echo "ip=$IP" >> $GITHUB_OUTPUT
+              shell: bash
 
             - name: Notify Discord
               uses: tsickert/discord-webhook@v7.0.0
               with:
                   webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
                   content: |
-                      🚀 EC2 인스턴스가 성공적으로 배포되었습니다!
-                      퍼블릭 IP: `${{ steps.get_ip.outputs.ip }}`
-                      접속: http://${{ steps.get_ip.outputs.ip }}
+                      ✅ EC2 배포 완료!
+                      IP: `${{ steps.get_ip.outputs.ip }}`
+                      URL: http://${{ steps.get_ip.outputs.ip }}

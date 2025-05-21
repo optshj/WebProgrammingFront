@@ -28,7 +28,9 @@ export default function WorldMap() {
                         import.meta.env.VITE_API_URL
                     }/api/shelter/data?perPage=1000`
                 );
-                setLocationData(response.data);
+                if (response.data) {
+                    setLocationData(response.data as ShelterType);
+                }
             } catch (error) {
                 console.error("Data fetching failed:", error);
             }
@@ -38,7 +40,7 @@ export default function WorldMap() {
                 const response = await axios.get(
                     `${import.meta.env.VITE_API_URL}/api/weather/data`
                 );
-                setWeatherData(response.data);
+                setWeatherData(response.data as WeatherType);
             } catch (error) {
                 console.error("Weather fetching failed:", error);
             } finally {

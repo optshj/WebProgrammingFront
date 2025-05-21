@@ -41,7 +41,7 @@ resource "aws_security_group" "react_sg" {
 }
 
 variable "docker_image" {
-  default = "your-dockerhub-username/react-app:latest"
+  default = "seongbinlee/hunt:latest"
 }
 
 variable "api_url" {

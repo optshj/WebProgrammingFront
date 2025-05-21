@@ -2,8 +2,13 @@ provider "aws" {
   region = "ap-northeast-2"
 }
 
+# 기존 보안 그룹 조회
+data "aws_security_group" "react_sg" {
+  name = "react-sg"
+}
+
 resource "aws_instance" "react_app" {
-  ami           = "ami-0c9c942bd7bf113a2" # Ubuntu 22.04 LTS
+  ami           = "ami-0c9c942bd7bf113a2"
   instance_type = "t3.micro"
   key_name      = "hunt-ec2-key"
 
@@ -18,33 +23,8 @@ resource "aws_instance" "react_app" {
                 ${var.docker_image}
               EOF
 
-  security_groups = [aws_security_group.react_sg.name]
-}
-
-resource "aws_security_group" "react_sg" {
-  name        = "react-sg"
-  description = "Allow HTTP traffic"
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # 기존 보안 그룹 연결
+  vpc_security_group_ids = [data.aws_security_group.react_sg.id]
 }
 
 variable "docker_image" {

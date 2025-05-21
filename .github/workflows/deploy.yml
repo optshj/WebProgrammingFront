@@ -52,10 +52,11 @@ jobs:
             - name: Terraform Apply
               run: terraform apply -auto-approve
 
-            - name: Get Public IP
+            - name: Get EC2 Public IP
               id: get_ip
               run: |
-                  IP=$(terraform output -raw instance_public_ip | tr -d '\n')
+                  RAW_OUTPUT=$(terraform output -raw instance_public_ip)
+                  IP=$(echo "$RAW_OUTPUT" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
                   echo "ip=$IP" >> $GITHUB_OUTPUT
               shell: bash
 

@@ -50,7 +50,9 @@ resource "aws_instance" "react_app" {
               EOF
 
   vpc_security_group_ids = [local.security_group_id]
-  tags = "Hunt EC2"
+  tags = {
+    Name:"Hunt EC2"
+    }
 }
 
 variable "docker_image" {

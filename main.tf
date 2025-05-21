@@ -60,7 +60,7 @@ variable "docker_image" {
 }
 
 variable "api_url" {
-  default = "https://web-programming-server.vercel.app/"
+  default = "https://web-programming-server.vercel.app"
 }
 
 output "instance_public_ip" {

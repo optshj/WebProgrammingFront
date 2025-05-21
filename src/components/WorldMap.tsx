@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 
 import type { ShelterType } from "../types/shelterType";
+import type { WeatherType } from "../types/weatherType";
 
 import Loading from "./Loading";
 import Marker from "./MapMarker";
 import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
-import type { WeatherType } from "../types/weatherType";
 import ShelterInfo from "./ShelterInfo";
 
 export default function WorldMap() {

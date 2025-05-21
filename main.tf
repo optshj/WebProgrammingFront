@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "react_app" {
   ami           = "ami-0c9c942bd7bf113a2" # Ubuntu 22.04 LTS
   instance_type = "t3.micro"
-  key_name      = "your-key-pair"
+  key_name      = "hunt-ec2-key"
 
   user_data = <<-EOF
               #!/bin/bash

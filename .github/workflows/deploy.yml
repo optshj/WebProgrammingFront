@@ -5,7 +5,7 @@ on:
         branches: [main]
 
 env:
-    IMAGE_NAME: your-dockerhub-username/react-app
+    IMAGE_NAME: seongbinlee/hunt
 
 jobs:
     build-and-push:

@@ -1,7 +1,7 @@
 import type { WeatherType } from "../types/weatherType";
 
 import { Pm10IndexBar, Pm25IndexBar } from "./PmIndexBar";
-import UVBar from "./UVbar";
+import UVBar from "./UVBar";
 
 export default function WeatherInfo({ data }: { data: WeatherType }) {
     return (

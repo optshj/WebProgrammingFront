@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useShowMessage } from "../hooks/useShowMessage";
 import type { ShelterItemType } from "../types/shelterType";
 
 interface ShelterInfoProps {
@@ -7,10 +9,44 @@ interface ShelterInfoProps {
     onToggleFavorite: () => void;
 }
 export default function ShelterInfo({ item, onClose, isFavorite, onToggleFavorite }: ShelterInfoProps) {
+    const ref = useRef<HTMLButtonElement>(null);
+    const messageElement = useShowMessage(
+        ref,
+        `${item.RSTR_NM}  ${isFavorite ? "추가되었습니다!" : "해제되었습니다!"}`
+    );
+    const isOperatingNow = () => {
+        const now = new Date();
+        const day = now.getDay(); // 일:0, 월:1, ... 토:6
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        const timeToMinutes = (time: string) => {
+            if (!time || time.length !== 4) return null;
+            const hour = Number(time.slice(0, 2));
+            const minute = Number(time.slice(2, 4));
+            return hour * 60 + minute;
+        };
+
+        if (day >= 1 && day <= 5) {
+            // 평일
+            const begin = timeToMinutes(item.WKDAY_OPER_BEGIN_TIME);
+            const end = timeToMinutes(item.WKDAY_OPER_END_TIME);
+            if (begin === null || end === null) return false;
+            return currentTime >= begin && currentTime <= end;
+        } else {
+            // 주말/공휴일
+            const begin = timeToMinutes(item.WKEND_HDAY_OPER_BEGIN_TIME);
+            const end = timeToMinutes(item.WKEND_HDAY_OPER_END_TIME);
+            if (begin === null || end === null) return false;
+            return currentTime >= begin && currentTime <= end;
+        }
+    };
+
+    const operatingNow = isOperatingNow();
+
     if (!item) return null;
 
     return (
         <div className="absolute top-0 left-0 z-50 flex flex-col justify-center gap-4 px-10 font-semibold bg-white h-lvh w-96">
+            {messageElement}
             <div className="flex items-center justify-end gap-2">
                 <button
                     className="absolute text-4xl text-gray-400 transition-colors top-8 right-8 hover:text-red-500"
@@ -26,17 +62,16 @@ export default function ShelterInfo({ item, onClose, isFavorite, onToggleFavorit
                     className={`text-3xl ${isFavorite ? "text-yellow-400" : "text-gray-300"} hover:text-yellow-500 `}
                     onClick={onToggleFavorite}
                     title={isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+                    ref={ref}
                 >
                     {isFavorite ? "★" : "☆"}
                 </button>
             </div>
             {item.RN_DTL_ADRES && <div className="text-sm text-gray-600">{item.RN_DTL_ADRES}</div>}
             <div className="flex items-center gap-1">
-                {item.FCLTY_OPRN_AT === "Y" ? (
-                    <span className="font-bold text-green-500">● 운영 중</span>
-                ) : (
-                    <span className="font-bold text-red-500">● 운영 안함</span>
-                )}
+                <span className={`font-bold ${operatingNow ? "text-green-500" : "text-red-500"}`}>
+                    ● {operatingNow ? "운영 중" : "운영 안함"}
+                </span>
             </div>
             <div className="p-3 rounded-lg bg-gray-50">
                 <h4 className="mb-2 font-semibold">⏰ 운영 시간</h4>

@@ -4,16 +4,14 @@ import { useWeatherData } from "../hooks/useWeatherData";
 
 import type { ShelterItemType } from "../types/shelterType";
 
-import { Map, MapMarker } from "react-kakao-maps-sdk";
 import Loading from "../components/Loading";
 import WeatherInfo from "../components/WeatherInfo";
 import ShelterInfo from "../components/ShelterInfo";
-import Marker from "../components/MapMarker";
+import ShelterMap from "../components/ShelterMap";
 
 export default function Page() {
     const { data: locationData, loading: shelterLoading } = useShelterData();
     const { data: weatherData, loading: weatherLoading } = useWeatherData();
-    const defaultPosition = { lat: 37.37452095059928, lng: 126.6337694513664 }; // incheon Univ.
 
     const [selectedMarker, setSelectedMarker] = useState<ShelterItemType | null>(null);
 
@@ -44,23 +42,13 @@ export default function Page() {
                     />
                 )}
             </div>
-            <Map className="w-full h-lvh" center={defaultPosition} level={6} onClick={() => setSelectedMarker(null)}>
-                {locationData.data.map((item, idx) => (
-                    <Marker
-                        item={item}
-                        key={idx}
-                        onClick={() => setSelectedMarker(item)}
-                        isFavorite={favorites.includes(item.RSTR_FCLTY_NO)}
-                    />
-                ))}
-                <MapMarker
-                    image={{
-                        src: "/assets/marker/marker_user.png",
-                        size: { width: 36, height: 36 },
-                    }}
-                    position={defaultPosition}
-                />
-            </Map>
+            <ShelterMap
+                locationData={locationData.data}
+                favorites={favorites}
+                onMarkerClick={setSelectedMarker}
+                onMapClick={() => setSelectedMarker(null)}
+                selectedMarker={selectedMarker}
+            />
         </div>
     );
 }

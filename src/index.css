@@ -23,3 +23,24 @@ body {
 .animate-delay-200 {
     animation-delay: 0.4s;
 }
+@keyframes fade-up-down {
+    0% {
+        opacity: 0;
+        margin-top: 8px;
+    }
+    25% {
+        opacity: 1;
+        margin-top: 0;
+    }
+    75% {
+        opacity: 1;
+        margin-top: 0;
+    }
+    100% {
+        opacity: 0;
+        margin-top: 8px;
+    }
+}
+.animate-fade-up-down {
+    animation: fade-up-down 1.2s both;
+}

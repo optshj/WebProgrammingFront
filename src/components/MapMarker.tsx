@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CustomOverlayMap, MapMarker } from "react-kakao-maps-sdk";
 import type { ShelterItemType } from "../types/shelterType";
 
@@ -5,9 +6,12 @@ interface MarkerProp {
     item: ShelterItemType;
     onClick: () => void;
     isFavorite: boolean;
-    isSelected: boolean; // 추가!
+    isSelected: boolean;
 }
+
 export default function Marker({ item, onClick, isFavorite, isSelected }: MarkerProp) {
+    const [isHovered, setIsHovered] = useState(false);
+
     return (
         <>
             <MapMarker
@@ -23,8 +27,10 @@ export default function Marker({ item, onClick, isFavorite, isSelected }: Marker
                     lng: item.LO,
                 }}
                 onClick={onClick}
+                onMouseOver={() => setIsHovered(true)}
+                onMouseOut={() => setIsHovered(false)}
             />
-            {isSelected && (
+            {(isSelected || isHovered) && (
                 <CustomOverlayMap position={{ lat: item.LA, lng: item.LO }} yAnchor={2.5}>
                     <div className="relative p-1.5 text-zinc-800 whitespace-nowrap cursor-pointer bg-white rounded-md font-semibold shadow-lg">
                         {item.RSTR_NM}

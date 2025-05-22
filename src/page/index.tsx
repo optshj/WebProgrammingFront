@@ -27,7 +27,7 @@ export default function Page() {
         });
     };
 
-    if (shelterLoading || weatherLoading || !locationData || !weatherData) return <Loading />;
+    if (shelterLoading || weatherLoading) return <Loading />;
 
     return (
         <div className="flex flex-row">

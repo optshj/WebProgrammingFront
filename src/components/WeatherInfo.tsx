@@ -1,9 +1,21 @@
 import type { WeatherType } from "../types/weatherType";
-
 import { Pm10IndexBar, Pm25IndexBar } from "./PmIndexBar";
 import UVBar from "./UVBar";
 
-export default function WeatherInfo({ data }: { data: WeatherType }) {
+export default function WeatherInfo({ data }: { data: WeatherType | null }) {
+    if (!data)
+        return (
+            <div className="flex flex-col items-center justify-center gap-4 px-10 font-semibold shadow-lg h-lvh w-96 bg-blue-50 rounded-xl">
+                <div className="text-5xl animate-bounce">🌧️</div>
+                <div className="text-2xl text-blue-600">앗! 날씨 정보를 못 불러왔어요...</div>
+                <div className="text-lg text-blue-400">
+                    <span>☁️ 구름이 서버를 가렸나봐요!</span>
+                </div>
+                <div className="text-base text-gray-500">
+                    <span>새로고침으로 다시 시도해 주세요</span>
+                </div>
+            </div>
+        );
     return (
         <div className="flex flex-col justify-center gap-4 px-10 font-semibold h-lvh w-96">
             <img className="w-36" src={`./assets/weather/${data.weather.weather[0].icon}.png`} />

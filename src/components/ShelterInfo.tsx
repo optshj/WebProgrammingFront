@@ -3,17 +3,18 @@ import { useShowMessage } from "../hooks/useShowMessage";
 import type { ShelterItemType } from "../types/shelterType";
 
 interface ShelterInfoProps {
-    item: ShelterItemType;
+    item: ShelterItemType | null;
     onClose: () => void;
     isFavorite: boolean;
     onToggleFavorite: () => void;
 }
 export default function ShelterInfo({ item, onClose, isFavorite, onToggleFavorite }: ShelterInfoProps) {
     const ref = useRef<HTMLButtonElement>(null);
-    const messageElement = useShowMessage(
-        ref,
-        `${item.RSTR_NM}  ${isFavorite ? "추가되었습니다!" : "해제되었습니다!"}`
-    );
+    const messageElement = useShowMessage(ref, `${isFavorite ? "추가되었습니다!" : "해제되었습니다!"}`);
+    if (!item)
+        return (
+            <div className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full">Loading...</div>
+        );
     const isOperatingNow = () => {
         const now = new Date();
         const day = now.getDay(); // 일:0, 월:1, ... 토:6
@@ -41,8 +42,6 @@ export default function ShelterInfo({ item, onClose, isFavorite, onToggleFavorit
     };
 
     const operatingNow = isOperatingNow();
-
-    if (!item) return null;
 
     return (
         <div className="absolute top-0 left-0 z-50 flex flex-col justify-center gap-4 px-10 font-semibold bg-white h-lvh w-96">

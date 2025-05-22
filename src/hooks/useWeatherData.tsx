@@ -9,17 +9,14 @@ export function useWeatherData() {
     useEffect(() => {
         const fetchWeather = async () => {
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/weather/data`
-                );
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/weather/data`);
                 setData(response.data as WeatherType);
             } catch (error) {
                 console.error("Weather fetching failed:", error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchWeather();
+        setLoading(false);
     }, []);
 
     return { data, loading };

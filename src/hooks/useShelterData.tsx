@@ -9,19 +9,14 @@ export function useShelterData() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(
-                    `${
-                        import.meta.env.VITE_API_URL
-                    }/api/shelter/data?perPage=1000`
-                );
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/shelter/data?perPage=1000`);
                 setData(response.data as ShelterType);
             } catch (error) {
                 console.error("Data fetching failed:", error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchData();
+        setLoading(false);
     }, []);
 
     return { data, loading };

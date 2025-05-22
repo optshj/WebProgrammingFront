@@ -43,7 +43,7 @@ export default function Page() {
                 )}
             </div>
             <ShelterMap
-                locationData={locationData.data}
+                locationData={locationData}
                 favorites={favorites}
                 onMarkerClick={setSelectedMarker}
                 onMapClick={() => setSelectedMarker(null)}

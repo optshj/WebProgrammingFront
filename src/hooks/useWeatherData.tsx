@@ -14,9 +14,9 @@ export function useWeatherData() {
             } catch (error) {
                 console.error("Weather fetching failed:", error);
             }
+            setLoading(false);
         };
         fetchWeather();
-        setLoading(false);
     }, []);
 
     return { data, loading };

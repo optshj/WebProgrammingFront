@@ -3,10 +3,11 @@ import Marker from "./MapMarker";
 import type { ShelterItemType } from "../types/shelterType";
 
 interface ShelterMapProps {
-    locationData: ShelterItemType[];
+    locationData: ShelterItemType[] | null;
     favorites: number[];
     onMarkerClick: (item: ShelterItemType) => void;
     onMapClick: () => void;
+    selectedMarker: ShelterItemType | null;
 }
 
 export default function ShelterMap({
@@ -15,8 +16,19 @@ export default function ShelterMap({
     onMarkerClick,
     onMapClick,
     selectedMarker,
-}: ShelterMapProps & { selectedMarker: ShelterItemType | null }) {
+}: ShelterMapProps) {
     const defaultPosition = { lat: 37.37452095059928, lng: 126.6337694513664 }; // incheon Univ.
+    if (!locationData) {
+        return (
+            <div className="flex flex-col items-center justify-center w-full h-lvh bg-pink-50">
+                <p className="text-lg font-semibold text-pink-600">
+                    앗! 지도를 불러오지 못했어요 😢
+                    <br />
+                    <span className="text-base font-normal">새로고침하거나 잠시 후 다시 시도해 주세요.</span>
+                </p>
+            </div>
+        );
+    }
     return (
         <Map className="w-full h-lvh" center={defaultPosition} level={6} onClick={onMapClick}>
             {locationData.map((item, idx) => (
@@ -25,7 +37,7 @@ export default function ShelterMap({
                     key={idx}
                     onClick={() => onMarkerClick(item)}
                     isFavorite={favorites.includes(item.RSTR_FCLTY_NO)}
-                    isSelected={selectedMarker?.RSTR_FCLTY_NO === item.RSTR_FCLTY_NO} // 추가!
+                    isSelected={selectedMarker?.RSTR_FCLTY_NO === item.RSTR_FCLTY_NO}
                 />
             ))}
             <MapMarker

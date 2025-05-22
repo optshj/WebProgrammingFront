@@ -23,7 +23,7 @@ export function Pm10IndexBar({ pmValue }: { pmValue: number }) {
     return (
         <div className="relative w-72">
             <div className="mb-1 font-semibold">
-                <div>미세먼지</div>
+                미세먼지
                 <div className={`${textColor} text-lg`}>
                     {status} ({pmValue}㎍/m³)
                 </div>
@@ -62,7 +62,7 @@ export function Pm25IndexBar({ pmValue }: { pmValue: number }) {
     return (
         <div className="relative w-72">
             <div className="mb-1 font-semibold">
-                <div>초미세먼지</div>
+                초미세먼지
                 <div className={` ${textColor} text-lg`}>
                     {status} ({pmValue}㎍/m³)
                 </div>

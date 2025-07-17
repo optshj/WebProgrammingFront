@@ -29,7 +29,7 @@ export default function BottomSheet({ children, open, onClose, snapPoints = [0.4
         }
     }, [open, initialY, controls])
 
-    const onDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const onDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
         const projectedY = info.point.y + info.velocity.y * 0.1
 
         const closestSnap = pixelSnapPoints.reduce((prev, curr) => (Math.abs(curr - projectedY) < Math.abs(prev - projectedY) ? curr : prev))

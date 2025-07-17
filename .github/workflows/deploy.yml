@@ -1,72 +1,72 @@
-name: Deploy to AWS
+# name: Deploy to AWS
 
-on:
-    push:
-        branches: [main]
+# on:
+#     push:
+#         branches: [main]
 
-env:
-    IMAGE_NAME: seongbinlee/hunt
+# env:
+#     IMAGE_NAME: seongbinlee/hunt
 
-jobs:
-    build-and-push:
-        runs-on: ubuntu-latest
-        environment: AWS_ACCESS_KEY
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+# jobs:
+#     build-and-push:
+#         runs-on: ubuntu-latest
+#         environment: AWS_ACCESS_KEY
+#         steps:
+#             - name: Checkout
+#               uses: actions/checkout@v3
 
-            - name: Docker Build
-              run: docker build -t $IMAGE_NAME:latest --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} .
+#             - name: Docker Build
+#               run: docker build -t $IMAGE_NAME:latest --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} .
 
-            - name: Docker Login
-              uses: docker/login-action@v3
-              with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+#             - name: Docker Login
+#               uses: docker/login-action@v3
+#               with:
+#                   username: ${{ secrets.DOCKERHUB_USERNAME }}
+#                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Docker Push
-              run: docker push $IMAGE_NAME:latest
+#             - name: Docker Push
+#               run: docker push $IMAGE_NAME:latest
 
-    deploy-infra:
-        needs: build-and-push
-        runs-on: ubuntu-latest
-        environment: AWS_ACCESS_KEY
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+#     deploy-infra:
+#         needs: build-and-push
+#         runs-on: ubuntu-latest
+#         environment: AWS_ACCESS_KEY
+#         steps:
+#             - name: Checkout
+#               uses: actions/checkout@v3
 
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-                  aws-region: ap-northeast-2
+#             - name: Configure AWS credentials
+#               uses: aws-actions/configure-aws-credentials@v4
+#               with:
+#                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+#                   aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+#                   aws-region: ap-northeast-2
 
-            - name: Terraform Apply
-              uses: hashicorp/setup-terraform@v2
-              with:
-                  terraform_version: 1.4.0
-                  terraform_wrapper: false
+#             - name: Terraform Apply
+#               uses: hashicorp/setup-terraform@v2
+#               with:
+#                   terraform_version: 1.4.0
+#                   terraform_wrapper: false
 
-            - name: Terraform Init
-              run: terraform init
+#             - name: Terraform Init
+#               run: terraform init
 
-            - name: Terraform Apply
-              run: terraform apply -auto-approve
+#             - name: Terraform Apply
+#               run: terraform apply -auto-approve
 
-            - name: Get EC2 Public IP
-              id: get_ip
-              run: |
-                  RAW_OUTPUT=$(terraform output -raw instance_public_ip)
-                  IP=$(echo "$RAW_OUTPUT" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
-                  echo "ip=$IP" >> $GITHUB_OUTPUT
-              shell: bash
+#             - name: Get EC2 Public IP
+#               id: get_ip
+#               run: |
+#                   RAW_OUTPUT=$(terraform output -raw instance_public_ip)
+#                   IP=$(echo "$RAW_OUTPUT" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+#                   echo "ip=$IP" >> $GITHUB_OUTPUT
+#               shell: bash
 
-            - name: Notify Discord
-              uses: tsickert/discord-webhook@v7.0.0
-              with:
-                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-                  content: |
-                      ✅ EC2 배포 완료!
-                      IP: `${{ steps.get_ip.outputs.ip }}`
-                      URL: http://${{ steps.get_ip.outputs.ip }}
+#             - name: Notify Discord
+#               uses: tsickert/discord-webhook@v7.0.0
+#               with:
+#                   webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+#                   content: |
+#                       ✅ EC2 배포 완료!
+#                       IP: `${{ steps.get_ip.outputs.ip }}`
+#                       URL: http://${{ steps.get_ip.outputs.ip }}

@@ -8,6 +8,7 @@ interface ShelterMapProps {
     onMarkerClick: (item: ShelterItemType) => void;
     onMapClick: () => void;
     selectedMarker: ShelterItemType | null;
+    userLocation: { lat: number; lng: number }
 }
 
 export default function ShelterMap({
@@ -16,8 +17,8 @@ export default function ShelterMap({
     onMarkerClick,
     onMapClick,
     selectedMarker,
+    userLocation,
 }: ShelterMapProps) {
-    const defaultPosition = { lat: 37.37452095059928, lng: 126.6337694513664 }; // incheon Univ.
     if (!locationData) {
         return (
             <div className="flex flex-col items-center justify-center w-full h-lvh bg-pink-50">
@@ -29,8 +30,9 @@ export default function ShelterMap({
             </div>
         );
     }
+    
     return (
-        <Map className="w-full h-lvh" center={defaultPosition} level={6} onClick={onMapClick}>
+        <Map className="w-full h-lvh" center={userLocation} level={4} onClick={onMapClick}>
             {locationData.map((item, idx) => (
                 <Marker
                     item={item}
@@ -43,9 +45,9 @@ export default function ShelterMap({
             <MapMarker
                 image={{
                     src: "/assets/marker/marker_user.png",
-                    size: { width: 36, height: 36 },
+                    size: { width: 72, height: 72 },
                 }}
-                position={defaultPosition}
+                position={userLocation}
             />
         </Map>
     );

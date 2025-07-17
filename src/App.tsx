@@ -1,5 +1,11 @@
 import WorldMap from "./page";
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
-    return <WorldMap />;
+    return(
+        <>
+            <Analytics/>
+            <WorldMap />
+        </> 
+    )
 }

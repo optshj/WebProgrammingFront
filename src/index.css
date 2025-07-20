@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 html {
     height: 100%;
@@ -43,4 +43,10 @@ body {
 }
 .animate-fade-up-down {
     animation: fade-up-down 1.2s both;
+}
+
+html {
+    @media (max-width: 640px) {
+        font-size: 12px;
+    }
 }

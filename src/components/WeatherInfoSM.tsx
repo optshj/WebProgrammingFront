@@ -39,6 +39,7 @@ export default function WeatherInfo({ data }: { data: WeatherType | null }) {
             </div>
             <Pm25IndexBar pmValue={parseInt(data.airPollution.pm25Value)} />
             <UVBar uvIndex={parseInt(data.weather.UV)} />
+            <div>출처 : OpenWeather, 기상청, 한국환경공단</div>
         </>
     )
 }

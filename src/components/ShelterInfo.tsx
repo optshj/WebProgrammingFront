@@ -1,5 +1,8 @@
-import { useRef } from 'react'
-import { useShowMessage } from '../hooks/useShowMessage'
+// src/components/ShelterInfo.tsx
+
+// 1. useRef와 useShowMessage 임포트를 제거합니다.
+// import { useRef } from 'react'
+// import { useShowMessage } from '../hooks/useShowMessage'
 import type { ShelterItemType } from '../types/shelterType'
 
 interface ShelterInfoProps {
@@ -8,12 +11,16 @@ interface ShelterInfoProps {
     onToggleFavorite: () => void
 }
 export default function ShelterInfo({ item, isFavorite, onToggleFavorite }: ShelterInfoProps) {
-    const ref = useRef<HTMLButtonElement>(null)
-    const messageElement = useShowMessage(ref, `${isFavorite ? '추가되었습니다!' : '해제되었습니다!'}`)
+    // 2. 훅과 관련된 코드를 모두 제거합니다.
+    // const ref = useRef<HTMLButtonElement>(null)
+    // const messageElement = useShowMessage(ref, `${isFavorite ? '추가되었습니다!' : '해제되었습니다!'}`)
+
     if (!item) return <div className="absolute top-0 left-0 z-50 flex items-center justify-center w-full h-full">Loading...</div>
+
     const isOperatingNow = () => {
+        // ... (내부 로직은 그대로 유지)
         const now = new Date()
-        const day = now.getDay() // 일:0, 월:1, ... 토:6
+        const day = now.getDay()
         const currentTime = now.getHours() * 60 + now.getMinutes()
         const timeToMinutes = (time: string) => {
             if (!time || time.length !== 4) return null
@@ -39,18 +46,21 @@ export default function ShelterInfo({ item, isFavorite, onToggleFavorite }: Shel
 
     return (
         <div className="font-semibold flex gap-4 flex-col">
-            {messageElement}
+            {/* 3. messageElement 렌더링 부분을 제거합니다. */}
+            {/* {messageElement} */}
             <div className="flex items-center justify-between mb-2">
                 <h3 className="text-2xl font-bold">{item.RSTR_NM}</h3>
                 <button
                     className={`text-3xl ${isFavorite ? 'text-yellow-400' : 'text-gray-300'} hover:text-yellow-500 `}
                     onClick={onToggleFavorite}
                     title={isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
-                    ref={ref}
+                    // 4. ref를 제거합니다.
+                    // ref={ref}
                 >
                     {isFavorite ? '★' : '☆'}
                 </button>
             </div>
+            {/* ... (나머지 JSX는 그대로 유지) */}
             {item.RN_DTL_ADRES && <div className="text-sm text-gray-600">{item.RN_DTL_ADRES}</div>}
             <div className="flex items-center gap-1">
                 <span className={`font-bold ${operatingNow ? 'text-green-500' : 'text-red-500'}`}>● {operatingNow ? '운영 중' : '운영 안함'}</span>
@@ -101,6 +111,7 @@ export default function ShelterInfo({ item, isFavorite, onToggleFavorite }: Shel
                 <div className={`w-3 h-3 rounded-full ${item.AR <= 50 ? 'bg-red-500' : item.AR <= 150 ? 'bg-yellow-400' : 'bg-green-500'}`} />
                 면적: {item.AR ? item.AR : 0}㎡ ({item.AR ? (item.AR / 3.3058).toFixed(2) : '0'}평)
             </div>
+            <div>제공 : 행정안전부_무더위쉼터</div>
         </div>
     )
 }

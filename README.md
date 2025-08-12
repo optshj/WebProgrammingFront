@@ -1,54 +1,23 @@
-# React + TypeScript + Vite
+# 🥵무더위쉼터 위치공유 서비스 - 쿨맵
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+프로젝트 링크 : https://summercoolmap.vercel.app/
+![alt text](2025-08-12093308-ezgif.com-video-to-gif-converter.gif)
+![alt text](2025-08-12093419-ezgif.com-video-to-gif-converter.gif)
 
-Currently, two official plugins are available:
+# 소개
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+근처 무더위쉼터를 쉽고 빠르게 찾을 수 있도록 위치와 쉼터정보를 제공
 
-## Expanding the ESLint configuration
+날씨정보를 한눈에 안내하여 안전한 여름나기를 지원
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Gemini기반 날씨 평가 지원
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# 주요기능
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+날씨정보 표시 : 날씨정보를 표시해 현재 날씨상태를 확인가능
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+지도 : 무더위쉼터의 위치를 지도 상 마커로 표시(쉼터 유형 파악 가능)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+자세한 정보 : 무더위쉼터의 자세한 정보를 확인가능
+
+즐겨찾기 : 즐겨찾기를 통해 자주가는 무더위쉼터 저장가능
